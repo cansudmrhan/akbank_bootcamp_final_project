@@ -219,10 +219,10 @@ export const BoardProvider: FC<PropsWithChildren> = ({ children }) => {
   };
 
   const setBoards = (boards: Board[]) => {
-    setState((prev) => ({
-      ...prev,
+    setState({
+      selectedBoardId: state.selectedBoardId,
       boards,
-    }));
+    });
   };
 
   return (
@@ -244,7 +244,7 @@ export const useBoardContext = () => {
   const { selectedBoardId, boards } = state;
 
   const selectedBoard = boards?.find((board) => board.id === selectedBoardId);
-  
+
   return {
     boards,
     selectedBoard,

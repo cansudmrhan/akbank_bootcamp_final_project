@@ -1,5 +1,11 @@
 import React, { useState, FC } from "react";
-import { AlignLeft, CheckSquare, Clock, MoreHorizontal } from "react-feather";
+import {
+  AlignLeft,
+  CheckSquare,
+  Clock,
+  MoreHorizontal,
+  MessageSquare,
+} from "react-feather";
 import { formatDate } from "../Common/Util";
 import Chip from "../Common/Chip";
 import Dropdown from "../Dropdown/Dropdown";
@@ -10,14 +16,8 @@ import { useBoardContext } from "../../contexts/BoardContext/BoardContext";
 
 const CardofList: FC<any> = (props) => {
   const { card, onRemoveCard, onUpdateCard } = props;
-  const {
-    title,
-    description,
-    duedate,
-    labels,
-    listId,
-    checklists,
-  } = card;
+  const { title, description, duedate, labels, comments, listId, checklists } =
+    card;
   const [showDropdown, setShowDropdown] = useState(false);
   const [showModal, setShowModal] = useState(false);
   return (
@@ -73,6 +73,13 @@ const CardofList: FC<any> = (props) => {
             <p className="card-footer-item">
               <Clock className="card-footer-icon" />
               {formatDate(duedate)}
+            </p>
+          )}
+
+          {comments && comments?.length > 0 && (
+            <p className="card-footer-item">
+              <MessageSquare className="card-footer-icon" />
+              {comments?.length}
             </p>
           )}
           {checklists && checklists?.length > 0 && (

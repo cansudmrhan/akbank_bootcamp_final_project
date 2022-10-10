@@ -20,6 +20,8 @@ export const LoginProvider: FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     instance.interceptors.request.use((config) => {
+      console.log("re-write config to use authorization");
+
       const _config = { ...config };
       _config.headers = {
         ...config.headers,

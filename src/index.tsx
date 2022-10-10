@@ -4,7 +4,6 @@ import "./index.css";
 import App from "./App";
 
 import { LoginProvider } from "./contexts/LoginContext/LoginContext";
-import { BoardProvider } from "./contexts/BoardContext/BoardContext";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -13,9 +12,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <LoginProvider>
-      <BoardProvider>
-        <App />
-      </BoardProvider>
+      <App />
     </LoginProvider>
   </React.StrictMode>
 );

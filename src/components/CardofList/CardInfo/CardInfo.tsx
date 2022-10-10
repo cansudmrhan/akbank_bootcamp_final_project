@@ -17,7 +17,13 @@ import Modal from "../../Modal/Modal";
 import CustomInput from "../../CustomInput/CustomInput";
 import { Styled } from "./CardInfo.styled";
 
-import { Card, Label, Comment } from "../../../contexts/BoardContext/types";
+import {
+  Card,
+  Label,
+  Comment,
+  Checklist,
+  ChecklistItem,
+} from "../../../contexts/BoardContext/types";
 
 const CardInfo: FC<any> = (props) => {
   const { onClose, card, listId, onUpdateCard } = props;
@@ -81,8 +87,70 @@ const CardInfo: FC<any> = (props) => {
     });
   };
 
+  const addChecklist = (value: string) => {
+    const checklist: Checklist = {
+      id: Date.now() + Math.random() * 2,
+      title: value,
+      items: [],
+      cardId: card.id,
+    };
+    setCardValues({
+      ...cardValues,
+      checklists: [...cardValues.checklists, checklist],
+    });
+  };
+
+  /*   const addItem = (value: string, id: number) => {
+    const item: ChecklistItem = {
+      id: Date.now() + Math.random() * 2,
+      title: value,
+      isChecked: false,
+      checklistId: id,
+    };
+    setCardValues({
+      ...cardValues,
+      ...checklists,
+      items: [...cardValues.tasks, task],
+    });
+  }; */
+
+  /*   const removeChecklist = (id: number) => {
+    const tasks = [...cardValues.tasks];
+
+    const tempTasks = tasks.filter((item) => item.id !== id);
+    setCardValues({
+      ...cardValues,
+      tasks: tempTasks,
+    });
+  };
+
+  const updateChecklist = (id: number, value: boolean) => {
+    const tasks = [...cardValues.tasks];
+
+    const index = tasks.findIndex((item) => item.id === id);
+    if (index < 0) return;
+
+    tasks[index].completed = Boolean(value);
+
+    setCardValues({
+      ...cardValues,
+      tasks,
+    });
+  };
+
+  const calculatePercent = () => {
+    if (!cardValues.tasks?.length) return 0;
+    const completed = cardValues.tasks?.filter(
+      (item) => item.completed
+    )?.length;
+    return (completed / cardValues.tasks?.length) * 100;
+  };
+
+  const calculatedPercent = calculatePercent(); */
+
   useEffect(() => {
     if (onUpdateCard) onUpdateCard(listId, cardValues.id, cardValues);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cardValues]);
 
   return (
@@ -177,41 +245,51 @@ const CardInfo: FC<any> = (props) => {
           </div>
 
           <div className="cardinfo-box">
-            <div className="cardinfo-box-title">
-              <CheckSquare />
-              <p>Checklists</p>
-            </div>
-            <div className="cardinfo-box-progress-bar">
-              <div
-                className="cardinfo-box-progress"
-                /*  style={{
-                width: `${calculatedPercent}%`,
-                backgroundColor: calculatedPercent === 100 ? "limegreen" : "",
-              }} */
-              />
-            </div>
-            {/*    checklist yanlış yapmışım değişicek */}
-            <div className="cardinfo-box-task-list">
-              {cardValues.checklists?.map((item: any) => (
-                <div key={item.id} className="cardinfo-box-task-checkbox">
-                  <input
-                    type="checkbox"
-                    defaultChecked={item.completed}
-                    /*    onChange={(event) =>
-                    updateTask(item.id, event.target.checked)
-                  } */
-                  />
-                  <p className={item.completed ? "completed" : ""}>
-                    {item.text}
-                  </p>
-                  <Trash /*  onClick={() => removeTask(item.id)} */ />
+            {cardValues.checklists?.map((checklist: any) => (
+              <div key={checklist.id}>
+                <div className="cardinfo-box-title">
+                  <CheckSquare />
+                  <p> Checklist : {checklist.title} </p>
                 </div>
-              ))}
-            </div>
+                <div className="cardinfo-box-progress-bar">
+                  <div
+                    className="cardinfo-box-progress"
+                    /*  style={{
+                    width: `${calculatedPercent}%`,
+                    backgroundColor: calculatedPercent === 100 ? "limegreen" : "",
+                  }} */
+                  />
+                </div>
+
+                <div className="cardinfo-box-task-list">
+                  {checklist?.items.map((item: any) => (
+                    <div key={item.id} className="cardinfo-box-task-checkbox">
+                      <input
+                        type="checkbox"
+                        defaultChecked={item.isChecked}
+                        /*    onChange={(event) =>
+                        updateChecklist(item.id, event.target.isChecked)
+                      } */
+                      />
+                      <p className={item.isChecked ? "completed" : ""}>
+                        {item.title}
+                      </p>
+                      <Trash /*  onClick={() => removeChecklist(item.id)} */ />
+                    </div>
+                  ))}
+
+                  <CustomInput
+                    text={"Add an item"}
+                    placeholder="Enter Item"
+                    /*  onSubmit={addItem} */
+                  />
+                </div>
+              </div>
+            ))}
             <CustomInput
-              text={"Add a Task"}
-              placeholder="Enter task"
-              /*  onSubmit={addTask} */
+              text={"Add a Checklist"}
+              placeholder="Enter Checklist"
+              onSubmit={addChecklist}
             />
           </div>
         </div>
