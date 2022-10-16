@@ -20,7 +20,6 @@ export const LoginProvider: FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     instance.interceptors.request.use((config) => {
-      console.log("re-write config to use authorization");
 
       const _config = { ...config };
       _config.headers = {
@@ -30,21 +29,21 @@ export const LoginProvider: FC<PropsWithChildren> = ({ children }) => {
       return _config;
     });
 
-    /* instance.interceptors.response.use(
+    instance.interceptors.response.use(
       (response) => {
-        return response
+        return response;
       },
       (error) => {
         if ([500, 401, 403].includes(error.response.status)) {
           setState((prev) => ({
             ...prev,
             isLoggedIn: false,
-            token: '',
-            username: '',
-          }))
+            token: "",
+            username: "",
+          }));
         }
       }
-    ) */
+    );
   }, [state.token]);
 
   const login = (token: string, username: string) => {
@@ -63,8 +62,8 @@ export const LoginProvider: FC<PropsWithChildren> = ({ children }) => {
       token: "",
       isLoggedIn: false,
     });
-    localStorage.setItem("token", "");
-    localStorage.setItem("username", "");
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
   };
 
   return (

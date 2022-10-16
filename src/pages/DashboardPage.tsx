@@ -1,24 +1,33 @@
-import React, { FC, useEffect } from "react";
-import { useLoaderData } from "react-router-dom";
-import { board } from "services/http/endpoints/board";
-import { useBoardContext } from "contexts/BoardContext/BoardContext";
+import React, { useEffect, FC } from "react";
+import { redirect, useLoaderData } from "react-router-dom";
+import { boardService } from "services/http/endpoints/board";
 import DashboardList from "../components/Dashboard/DashboardList";
-import { Board } from "contexts/BoardContext/types";
+import { Board, Label as ILabel } from "contexts/BoardContext/types";
+import { useAppContext } from "contexts/AppContext/AppContext";
 type Props = {};
 
-export const loader = async () => {
-  const { data } = await board.list();
+export const action = async () => {
+  const response = await boardService.create({ title: "Untitled Board" });
+  return redirect(`/board/${response.data.id.toString()}`);
+};
 
-  return Promise.resolve(data as Board[]);
+export const loader = async () => {
+  const { data } = await boardService.list();
+  const { data: labels } = await boardService.getLabels();
+
+  return { labels, data };
 };
 
 const DashboardPage: FC<Props> = () => {
-  const data = useLoaderData() as Board[];
-  const { setBoards } = useBoardContext();
+  const { data, labels } = useLoaderData() as {
+    data: Board[];
+    labels: ILabel[];
+  };
+  const { setLabels } = useAppContext();
 
-  useEffect(() => {}, [data, setBoards]);
+  useEffect(() => setLabels(labels), [labels, setLabels]);
 
-  return <DashboardList />;
+  return <DashboardList list={data} />;
 };
 
 export default DashboardPage;

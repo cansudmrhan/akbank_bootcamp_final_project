@@ -3,114 +3,23 @@ import { Styled } from "./Board.styled";
 import List from "../List/List";
 import Navbar from "../Navbar/Navbar";
 import CustomInput from "../CustomInput/CustomInput";
-import { useBoardContext } from "../../contexts/BoardContext/BoardContext";
-import { useParams } from "react-router-dom";
+import { Board as IBoard } from "contexts/BoardContext/types";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useLoginContext } from "contexts/LoginContext/LoginContext";
 
-const Board: FC<any> = (props) => {
-  const { boards, setBoards } = useBoardContext();
-  const { id } = useParams();
+type Props = {
+  board: IBoard;
+};
 
-  const selectedBoard = boards?.find((board) => board.id === +id!);
-  console.log(id);
+const Board: FC<Props> = ({ board }) => {
+  const location = useLocation();
+  const { logout } = useLoginContext();
 
-  const handleUpdateBoard = (title: string) => {
-    if (boards === null) return;
-    const boardIndex = boards.findIndex((item: any) => item.id === +id!);
-    if (boardIndex < 0) return;
+  const navigate = useNavigate();
 
-    const tempBoardsList = [...boards];
-
-    tempBoardsList[boardIndex].title = title;
-
-    setBoards(tempBoardsList);
-  };
-
-  const handleAddList = (title: string) => {
-    if (boards === null) return;
-    const boardIndex = boards.findIndex((item: any) => item.id === +id!);
-    console.log(boardIndex);
-    const tempBoardsList = [...boards];
-    tempBoardsList[boardIndex].lists.push({
-      id: Date.now() + Math.random() * 2,
-      title: title,
-      order: 4,
-      cards: [],
-    });
-    setBoards(tempBoardsList);
-  };
-  const handleRemoveList = (listId: number) => {
-    if (boards === null) return;
-    const boardIndex = boards.findIndex((item: any) => item.id === +id!);
-    const tempBoardsList = [...boards];
-    const lists = tempBoardsList[+boardIndex!].lists;
-    const listIndex = lists?.findIndex((item: any) => item.id === listId);
-    if (listIndex < 0) return;
-    lists.splice(listIndex, 1);
-    setBoards(tempBoardsList);
-  };
-
-  const handleAddCard = (listId: any, title: string) => {
-    if (boards === null) return;
-    const boardIndex = boards.findIndex((item: any) => item.id === +id!);
-    if (boardIndex < 0) return;
-    const listIndex = boards[boardIndex].lists.findIndex(
-      (list: any) => list.id === +listId!
-    );
-    if (listIndex < 0) return;
-    const tempBoardsList = [...boards];
-    tempBoardsList[boardIndex].lists[listIndex].cards.push({
-      id: Date.now() + Math.random() * 2,
-      title,
-      description: "",
-      duedate: "",
-      labels: [],
-      comments: [],
-      listId: listId,
-      order: 10,
-      checklists: [],
-    });
-    setBoards(tempBoardsList);
-  };
-
-  const handleRemoveCard = (listId: number, cardId: number) => {
-    if (boards === null) return;
-    const boardIndex = boards.findIndex((item: any) => item.id === +id!);
-    if (boardIndex < 0) return;
-
-    const listIndex = boards[boardIndex].lists.findIndex(
-      (list: any) => list.id === +listId!
-    );
-    if (listIndex < 0) return;
-
-    const tempBoardsList = [...boards];
-    const cards = tempBoardsList[boardIndex].lists[listIndex].cards;
-
-    const cardIndex = cards.findIndex((item) => item.id === cardId);
-    if (cardIndex < 0) return;
-
-    cards.splice(cardIndex, 1);
-    setBoards(tempBoardsList);
-  };
-
-  const handleUpdateCard = (listId: number, cardId: number, card: any) => {
-    if (boards === null) return;
-    const boardIndex = boards.findIndex((item: any) => item.id === +id!);
-    if (boardIndex < 0) return;
-
-    const listIndex = boards[boardIndex].lists.findIndex(
-      (list: any) => list.id === +listId!
-    );
-    if (listIndex < 0) return;
-
-    const tempBoardsList = [...boards];
-    const cards = tempBoardsList[boardIndex].lists[listIndex].cards;
-
-    const cardIndex = cards.findIndex((item) => item.id === cardId);
-    if (cardIndex < 0) return;
-
-    tempBoardsList[boardIndex].lists[listIndex].cards[cardIndex] = card;
-
-    setBoards(tempBoardsList);
+  const handleLogout = () => {
+    navigate("/");
+    setTimeout(logout, 100);
   };
 
   return (
@@ -119,19 +28,13 @@ const Board: FC<any> = (props) => {
         <div className="app">
           <div className="app-boards-container">
             <div className="app-boards">
-              <Navbar
-                onUpdateBoard={handleUpdateBoard}
-                selectedBoard={selectedBoard}
-              />
-              {selectedBoard?.lists.map((list) => (
+              <Navbar selectedBoard={board} />
+              {board?.lists?.map((list) => (
                 <List
                   key={list.id}
                   list={list}
-                  boardId={id}
-                  onRemoveList={handleRemoveList}
-                  onAddCard={handleAddCard}
-                  onUpdateCard={handleUpdateCard}
-                  onRemoveCard={handleRemoveCard}
+                  boardId={board.id}
+                  board={board}
                 />
               ))}
 
@@ -142,9 +45,14 @@ const Board: FC<any> = (props) => {
                   placeholder="Enter List Name"
                   text="Add List"
                   buttonText="Add List"
-                  onSubmit={handleAddList}
+                  inputName="list-title"
+                  method="post"
+                  action={`${location.pathname}/list/create`}
                 />
               </div>
+              <footer className="footer">
+                <p onClick={handleLogout}>LOGOUT</p>
+              </footer>
             </div>
           </div>
         </div>

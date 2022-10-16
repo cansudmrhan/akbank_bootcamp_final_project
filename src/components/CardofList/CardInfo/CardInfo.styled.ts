@@ -1,5 +1,7 @@
 import styled from "styled-components";
-
+export const InvisibleInput = styled.input`
+  display: none;
+`;
 export const Styled = styled.div`
   .cardinfo {
     padding: 30px;
@@ -90,20 +92,31 @@ export const Styled = styled.div`
     width: 0;
     transition: 200ms;
   }
+
   .card-info-box-comments,
   .cardinfo-box-task-list {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    margin: 1rem 0 0 0;
   }
 
-  .cardinfo-box-comment{
-    text-align: left;
-  }
+  /*   .cardinfo-box-comment {
+     text-align: left; 
+ 
+  } */
 
   .cardinfo-box-task-checkbox {
     display: flex;
     gap: 10px;
+  }
+
+  .cardinfo-box-task-checkbox__first {
+    display: flex;
+    margin-right: auto;
+    p {
+      margin-left: 0.5rem;
+    }
   }
 
   .cardinfo-box-task-checkbox input,
@@ -123,6 +136,10 @@ export const Styled = styled.div`
     text-decoration-line: line-through;
   }
 
+  .cardinfo-box__datepicker {
+    margin-right: auto;
+  }
+
   .cardinfo-box input[type="date"] {
     width: fit-content;
     border: 2px solid #ddd;
@@ -130,5 +147,9 @@ export const Styled = styled.div`
     outline: none;
     font-size: 1rem;
     padding: 10px;
+  }
+
+  .w-100 {
+    width: 100%;
   }
 `;

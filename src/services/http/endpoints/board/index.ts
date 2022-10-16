@@ -1,1 +1,1 @@
-export * as board from "./methods";
+export * as boardService from "./methods";

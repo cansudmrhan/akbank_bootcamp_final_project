@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import type { FC } from "react";
-/* import { v4 as uuid } from "uuid"; */
+import { Form, useFetcher, useParams } from "react-router-dom";
+
 import {
   Calendar,
   CheckSquare,
@@ -11,147 +12,66 @@ import {
   MessageSquare,
 } from "react-feather";
 
-import { colorsList } from "../../Common/Util";
 import Chip from "../../Common/Chip";
 import Modal from "../../Modal/Modal";
 import CustomInput from "../../CustomInput/CustomInput";
-import { Styled } from "./CardInfo.styled";
+import { Styled, InvisibleInput } from "./CardInfo.styled";
 
-import {
-  Card,
-  Label,
-  Comment,
-  Checklist,
-  ChecklistItem,
-} from "../../../contexts/BoardContext/types";
+import { Card, Label } from "../../../contexts/BoardContext/types";
+import { UnstyledButton } from "shared/Button";
+import { useAppContext } from "contexts/AppContext/AppContext";
 
 const CardInfo: FC<any> = (props) => {
-  const { onClose, card, listId, onUpdateCard } = props;
+  const { onClose, card, listId } = props;
+  const { id: boardId } = useParams();
+  const { labels } = useAppContext();
 
-  const [selectedColor, setSelectedColor] = useState("");
+  const [selectedColor, setSelectedColor] = useState(1);
   const [cardValues, setCardValues] = useState<Card>({
     ...card,
   });
-  console.log(cardValues);
+  const fetcher = useFetcher();
 
-  const updateTitle = (value: string) => {
-    setCardValues({ ...cardValues, title: value });
-  };
-
-  const updateDesc = (value: string) => {
-    setCardValues({ ...cardValues, description: value });
-  };
-
-  const addComment = (value: string) => {
-    const comment: Comment = {
-      id: Date.now() + Math.random() * 2,
-      message: value,
-      /*  author:User */
-    };
-    setCardValues({
-      ...cardValues,
-      comments: [...cardValues.comments, comment],
-    });
-  };
-
-  const addLabel = (label: Label) => {
-    const index = cardValues.labels.findIndex(
-      (item) => item.title === label.title
-    );
-    if (index > -1) return;
-
-    setSelectedColor("");
-    setCardValues({
-      ...cardValues,
-      labels: [...cardValues.labels, label],
-    });
-  };
-
-  const removeLabel = (label: Label) => {
-    const tempLabels = cardValues.labels.filter(
-      (item) => item.title !== label.title
-    );
-
-    setCardValues({
-      ...cardValues,
-      labels: tempLabels,
-    });
-  };
-
-  const updateDate = (duedate: string) => {
-    if (!duedate) return;
-
-    setCardValues({
-      ...cardValues,
-      duedate,
-    });
-  };
-
-  const addChecklist = (value: string) => {
-    const checklist: Checklist = {
-      id: Date.now() + Math.random() * 2,
-      title: value,
-      items: [],
-      cardId: card.id,
-    };
-    setCardValues({
-      ...cardValues,
-      checklists: [...cardValues.checklists, checklist],
-    });
-  };
-
-  /*   const addItem = (value: string, id: number) => {
-    const item: ChecklistItem = {
-      id: Date.now() + Math.random() * 2,
-      title: value,
-      isChecked: false,
-      checklistId: id,
-    };
-    setCardValues({
-      ...cardValues,
-      ...checklists,
-      items: [...cardValues.tasks, task],
-    });
-  }; */
-
-  /*   const removeChecklist = (id: number) => {
-    const tasks = [...cardValues.tasks];
-
-    const tempTasks = tasks.filter((item) => item.id !== id);
-    setCardValues({
-      ...cardValues,
-      tasks: tempTasks,
-    });
-  };
-
-  const updateChecklist = (id: number, value: boolean) => {
-    const tasks = [...cardValues.tasks];
-
-    const index = tasks.findIndex((item) => item.id === id);
-    if (index < 0) return;
-
-    tasks[index].completed = Boolean(value);
-
-    setCardValues({
-      ...cardValues,
-      tasks,
-    });
-  };
-
+  // çalışmazsa checklists i aradan kaldır
   const calculatePercent = () => {
-    if (!cardValues.tasks?.length) return 0;
-    const completed = cardValues.tasks?.filter(
-      (item) => item.completed
+    if (!cardValues.checklists?.length) return 0;
+    const completed = cardValues.checklists?.filter(
+      (item: any) => item.items?.filter((item2: any) => item2.isChecked)
+      /* (item:any) => item.isChecked, */
     )?.length;
-    return (completed / cardValues.tasks?.length) * 100;
+    return (completed / cardValues.checklists?.length) * 100;
   };
-
-  const calculatedPercent = calculatePercent(); */
+  const calculatedPercent = calculatePercent();
 
   useEffect(() => {
-    if (onUpdateCard) onUpdateCard(listId, cardValues.id, cardValues);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cardValues]);
+    setCardValues(props.card);
+  }, [props.card]);
+
+  const updateCard = (event: React.FormEvent<HTMLInputElement>) => {
+    const value = event.currentTarget.value;
+    const formData = new FormData();
+    formData.set("card-date", value);
+    formData.set("title", card.title);
+    fetcher.submit(formData, {
+      method: "patch",
+      action: `/board/${boardId}/list/${listId}/card/${card?.id}`,
+    });
+  };
+
+  const itemFetcher = useFetcher();
+  const updateChecklistItem = (
+    event: React.FormEvent<HTMLInputElement>,
+    checklistId: number,
+    itemId: number
+  ) => {
+    const isChecked = event.currentTarget.checked;
+    const formData = new FormData();
+    formData.set("checked", isChecked.toString());
+    itemFetcher.submit(formData, {
+      method: "patch",
+      action: `/board/${boardId}/list/${listId}/card/${card?.id}/checklist/${checklistId}/item/${itemId}`,
+    });
+  };
 
   return (
     <Styled>
@@ -163,10 +83,11 @@ const CardInfo: FC<any> = (props) => {
               <p>Title</p>
             </div>
             <CustomInput
-              defaultValue={cardValues.title}
               text={cardValues.title}
               placeholder="Enter Title"
-              onSubmit={updateTitle}
+              inputName="card-title"
+              method="patch"
+              action={`/board/${boardId}/list/${listId}/card/${card?.id}`}
             />
           </div>
 
@@ -176,10 +97,11 @@ const CardInfo: FC<any> = (props) => {
               <p>Description</p>
             </div>
             <CustomInput
-              defaultValue={cardValues.description}
               text={cardValues.description || "Add a Description"}
               placeholder="Enter description"
-              onSubmit={updateDesc}
+              inputName="card-description"
+              method="patch"
+              action={`/board/${boardId}/list/${listId}/card/${card?.id}`}
             />
           </div>
 
@@ -192,13 +114,16 @@ const CardInfo: FC<any> = (props) => {
               {cardValues.comments?.map((item: any) => (
                 <div key={item.id} className="cardinfo-box-comment">
                   <p>{item.message}</p>
+                  <p>Author: {item.author.username}</p>
                 </div>
               ))}
             </div>
             <CustomInput
               text={"Add a comment"}
               placeholder="Your comment"
-              onSubmit={addComment}
+              inputName="card-comment"
+              method="post"
+              action={`/board/${boardId}/list/${listId}/card/${card?.id}/comment/create`}
             />
           </div>
 
@@ -207,12 +132,16 @@ const CardInfo: FC<any> = (props) => {
               <Calendar />
               <p>Duedate</p>
             </div>
-            <input
-              type="date"
-              defaultValue={cardValues.duedate}
-              min={new Date().toISOString().substr(0, 10)}
-              onChange={(event) => updateDate(event.target.value)}
-            />
+            <fetcher.Form method="patch" className="cardinfo-box__datepicker">
+              <input
+                autoFocus
+                type="date"
+                defaultValue={cardValues.duedate}
+                min={new Date().toISOString().substr(0, 10)}
+                name="card-date"
+                onChange={updateCard}
+              />
+            </fetcher.Form>
           </div>
 
           <div className="cardinfo-box">
@@ -222,25 +151,29 @@ const CardInfo: FC<any> = (props) => {
             </div>
             <div className="cardinfo-box-labels">
               {cardValues.labels?.map((item: any, index: any) => (
-                <Chip key={index} item={item} removeLabel={removeLabel} />
+                <Chip
+                  key={index}
+                  item={item}
+                  action={`/board/${boardId}/list/${listId}/card/${card?.id}/card-label/${item?.CardLabel?.id}`}
+                />
               ))}
             </div>
             <ul>
-              {colorsList.map((item, index) => (
+              {labels.map((item) => (
                 <li
-                  key={index}
-                  style={{ backgroundColor: item }}
-                  className={selectedColor === item ? "li-active" : ""}
-                  onClick={() => setSelectedColor(item)}
+                  key={item.id}
+                  style={{ backgroundColor: item.color }}
+                  className={selectedColor === item.id ? "li-active" : ""}
+                  onClick={() => setSelectedColor(item.id)}
                 />
               ))}
             </ul>
             <CustomInput
               text="Add Label"
               placeholder="Enter label text"
-              onSubmit={(value: string) =>
-                addLabel({ id: Date.now() + Math.random() * 2, title: value })
-              }
+              method="post"
+              action={`/board/${boardId}/list/${listId}/card/${card?.id}/card-label/${selectedColor}/create`}
+              inputName="card-label"
             />
           </div>
 
@@ -254,42 +187,65 @@ const CardInfo: FC<any> = (props) => {
                 <div className="cardinfo-box-progress-bar">
                   <div
                     className="cardinfo-box-progress"
-                    /*  style={{
-                    width: `${calculatedPercent}%`,
-                    backgroundColor: calculatedPercent === 100 ? "limegreen" : "",
-                  }} */
+                    style={{
+                      width: `${calculatedPercent}%`,
+                      backgroundColor:
+                        calculatedPercent === 100 ? "limegreen" : "",
+                    }}
                   />
                 </div>
 
                 <div className="cardinfo-box-task-list">
                   {checklist?.items.map((item: any) => (
                     <div key={item.id} className="cardinfo-box-task-checkbox">
-                      <input
-                        type="checkbox"
-                        defaultChecked={item.isChecked}
-                        /*    onChange={(event) =>
-                        updateChecklist(item.id, event.target.isChecked)
-                      } */
-                      />
-                      <p className={item.isChecked ? "completed" : ""}>
-                        {item.title}
-                      </p>
-                      <Trash /*  onClick={() => removeChecklist(item.id)} */ />
+                      <div className="cardinfo-box-task-checkbox__first">
+                        <itemFetcher.Form method="patch">
+                          <input
+                            type="checkbox"
+                            defaultChecked={item.isChecked}
+                            onChange={(event) =>
+                              updateChecklistItem(
+                                event,
+                                checklist?.id,
+                                item?.id
+                              )
+                            }
+                          />
+                        </itemFetcher.Form>
+                        <p
+                          onDoubleClick={() => console.log("double cliened,")}
+                          className={item.isChecked ? "completed" : ""}
+                        >
+                          {item.title}
+                        </p>
+                      </div>
+                      <Form
+                        method="delete"
+                        action={`/board/${boardId}/list/${listId}/card/${card?.id}/checklist/${checklist?.id}/item/${item.id}`}
+                      >
+                        <UnstyledButton type="submit">
+                          <Trash />
+                        </UnstyledButton>
+                      </Form>
                     </div>
                   ))}
 
                   <CustomInput
-                    text={"Add an item"}
-                    placeholder="Enter Item"
-                    /*  onSubmit={addItem} */
+                    text={"Add a item"}
+                    placeholder="Add a item"
+                    inputName="card-checklistitem"
+                    method="post"
+                    action={`/board/${boardId}/list/${listId}/card/${card?.id}/checklist/${checklist?.id}/item/create`}
                   />
                 </div>
               </div>
             ))}
             <CustomInput
-              text={"Add a Checklist"}
-              placeholder="Enter Checklist"
-              onSubmit={addChecklist}
+              text={"Add a checklist"}
+              placeholder="Add a checklist"
+              inputName="card-checklist"
+              method="post"
+              action={`/board/${boardId}/list/${listId}/card/${card?.id}/checklist/create`}
             />
           </div>
         </div>

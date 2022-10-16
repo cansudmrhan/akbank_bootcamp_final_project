@@ -1,28 +1,52 @@
-import React, { FC, useState, useEffect } from "react";
-import { Nav, StyledLink, NavInput, Icon } from "./Navbar.styled";
-import CustomInput from "../CustomInput/CustomInput";
+import React, { FC, useEffect, useState } from "react";
+import { Nav, StyledLink, Icon, NavInput,Title } from "./Navbar.styled";
+import { Form, useFetcher, useNavigate } from "react-router-dom";
 import Dropdown from "../Dropdown/Dropdown";
-import { useParams } from "react-router-dom";
 
-const Navbar: FC<any> = ({ onUpdateBoard, selectedBoard }) => {
-  const { id } = useParams();
-
+const Navbar: FC<any> = ({ selectedBoard }) => {
   const [showDropdown, setShowDropdown] = useState(false);
-  const handleShowMembers = () => {};
+  const [editTitle, setEditTitle] = useState(false);
+  const fetcher = useFetcher();
+
+
+  useEffect(() => {
+    if (fetcher.state === "submitting") {
+      setEditTitle(false);
+    }
+  }, [fetcher.state]);
+
+  const cancelUpdate = (event: any) => {
+    if (event.code === "Escape") {
+      setEditTitle(false);
+    }
+  };
 
   return (
     <Nav>
-      <StyledLink className="link" to="/">
-        Boards
-        <span className="material-symbols-outlined">Dashboard</span>
+      <StyledLink to="/">
+       BOARDS
       </StyledLink>
 
-      <CustomInput
-        text={selectedBoard?.title || "Untitled Board"}
-        placeholder="Your comment"
-        onSubmit={onUpdateBoard}
-      />
+      <fetcher.Form method="patch">
+        {editTitle ? (
+          <NavInput
+            name="title"
+            defaultValue={selectedBoard?.title || "Untitled Board"}
+            onKeyDown={cancelUpdate}
+            autoFocus
+          />
+        ) : (
+          <Title
+            className="custom-input-display"
+            onClick={() => setEditTitle(true)}
+          >
+            {selectedBoard.title}
+            <span className="material-symbols-outlined">visibility</span>
+          </Title>
+        )}
+      </fetcher.Form>
 
+  
       <Icon
         className="icon"
         onClick={(event) => {
@@ -36,7 +60,35 @@ const Navbar: FC<any> = ({ onUpdateBoard, selectedBoard }) => {
             class="board-dropdown"
             onClose={() => setShowDropdown(false)}
           >
-            <p onClick={handleShowMembers}>Delete Card</p>
+         <select
+            /*   size="sm"  */
+              className="filter-select"
+              /* onChange={handleChangeCategory} */
+            /*   value={filteredCategory} */
+            >
+              <option value={""}>Add a Member</option>
+              {selectedBoard.lists.map((list:any) => (
+                <option key={list.id} value={list.id}>
+                  {list.title}
+                </option>
+              ))}
+            </select> 
+            {/*             <Form
+              method="delete"
+              onSubmit={(event) => {
+                if (
+                  !window.confirm(
+                    "Please confirm you want to delete this record."
+                  )
+                ) {
+                  event.preventDefault();
+                }
+              }}
+            >
+              <HoverButton type="submit">
+                Delete {selectedBoard?.title || "Untitled Board"}
+              </HoverButton>
+            </Form> */}
           </Dropdown>
         )}
       </Icon>

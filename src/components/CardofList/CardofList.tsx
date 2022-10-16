@@ -6,20 +6,30 @@ import {
   MoreHorizontal,
   MessageSquare,
 } from "react-feather";
+import { Form, useLocation } from "react-router-dom";
+
 import { formatDate } from "../Common/Util";
 import Chip from "../Common/Chip";
 import Dropdown from "../Dropdown/Dropdown";
 import CardInfo from "./CardInfo/CardInfo";
 import { Styled } from "./CardofList.styled";
+import { HoverButton, UnstyledButton } from "shared/Button";
 
-import { useBoardContext } from "../../contexts/BoardContext/BoardContext";
-
-const CardofList: FC<any> = (props) => {
-  const { card, onRemoveCard, onUpdateCard } = props;
-  const { title, description, duedate, labels, comments, listId, checklists } =
-    card;
+const CardofList: FC<any> = ({ card, onDragEnter, onDragEnd }) => {
+  const location = useLocation();
+  const {
+    id,
+    title,
+    description,
+    duedate,
+    labels,
+    comments,
+    listId,
+    checklists,
+  } = card;
   const [showDropdown, setShowDropdown] = useState(false);
   const [showModal, setShowModal] = useState(false);
+
   return (
     <Styled>
       {showModal && (
@@ -27,15 +37,14 @@ const CardofList: FC<any> = (props) => {
           onClose={() => setShowModal(false)}
           card={card}
           listId={listId}
-          onUpdateCard={onUpdateCard}
         />
       )}
       <div
         className="card"
         key={card.id}
         draggable
-        /*   onDragEnd={() => onDragEnd(boardId, id)}
-        onDragEnter={() => onDragEnter(boardId, id)} */
+        onDragEnd={() => onDragEnd(listId, id)}
+        onDragEnter={() => onDragEnter(listId, id)}
         onClick={() => setShowModal(true)}
       >
         <div className="card-top">
@@ -57,7 +66,21 @@ const CardofList: FC<any> = (props) => {
                 class="board-dropdown"
                 onClose={() => setShowDropdown(false)}
               >
-                <p onClick={() => onRemoveCard(listId, card.id)}>Delete Card</p>
+                <Form
+                  action={`${location.pathname}/list/${listId}/card/${id}`}
+                  method="delete"
+                  onSubmit={(event) => {
+                    if (
+                      !window.confirm(
+                        "Please confirm you want to delete this record."
+                      )
+                    ) {
+                      event.preventDefault();
+                    }
+                  }}
+                >
+                  <HoverButton type="submit">Delete Card</HoverButton>
+                </Form>
               </Dropdown>
             )}
           </div>

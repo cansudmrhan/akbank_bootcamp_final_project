@@ -1,69 +1,76 @@
-import React, { useState ,FC} from "react";
+import React, { useState, useEffect, FC, PropsWithChildren } from "react";
 
-import { X } from "react-feather"; 
+import { X } from "react-feather";
+import { useFetcher } from "react-router-dom";
 import { Styled } from "./CustomInput.styled";
 interface CustomInputProps {
   text: string;
-  onSubmit?: (value: string) => void;
   displayClass?: string;
   editClass?: string;
   placeholder?: string;
-  defaultValue?: string;
   buttonText?: string;
+  method: "get" | "post" | "put" | "patch" | "delete";
+  action: string;
+  inputName: string;
 }
-const CustomInput: FC<any> = (props:CustomInputProps) => {
+const CustomInput: FC<PropsWithChildren<CustomInputProps>> = (props) => {
   const {
     text,
-    onSubmit,
     displayClass,
     editClass,
     placeholder,
-    defaultValue,
     buttonText,
+    method,
+    action,
+    inputName = "custom-input",
+    children = undefined,
   } = props;
   const [isCustomInput, setIsCustomInput] = useState(false);
-  const [inputText, setInputText] = useState(defaultValue || "");
+  const fetcher = useFetcher();
 
-  const submission = (e: any) => {
-    e.preventDefault();
-    if (inputText && onSubmit) {
-      setInputText("");
-      onSubmit(inputText);
+  useEffect(() => {
+    if (fetcher.state === "submitting") {
+      setIsCustomInput(false);
     }
-    setIsCustomInput(false);
-  };
+  }, [fetcher.state]);
 
   return (
     <Styled>
-    <div className="custom-input">
-      {isCustomInput ? (
-        <form
-          className={`custom-input-edit ${editClass ? editClass : ""}`}
-          onSubmit={submission}
-        >
-          <input
-            type="text"
-            value={inputText}
-            placeholder={placeholder || text}
-            onChange={(event) => setInputText(event.target.value)}
-            autoFocus
-          />
-          <div className="custom-input-edit-footer">
-            <button type="submit">{buttonText || "Add"}</button>
-            <X onClick={() => setIsCustomInput(false)} className="closeIcon" />
-          </div>
-        </form>
-      ) : (
-        <p
-          className={`custom-input-display ${displayClass ? displayClass : ""}`}
-          onClick={() => setIsCustomInput(true)}
-        >
-          {text}
-        </p>
-      )}
-    </div>
+      <div className="custom-input">
+        {isCustomInput ? (
+          <fetcher.Form
+            className={`custom-input-edit ${editClass ? editClass : ""}`}
+            action={action}
+            method={method}
+          >
+            {children}
+            <input
+              type="text"
+              placeholder={placeholder || text}
+              name={inputName}
+              autoFocus
+            />
+            <div className="custom-input-edit-footer">
+              <button type="submit">{buttonText || "Add"}</button>
+              <X
+                onClick={() => setIsCustomInput(false)}
+                className="closeIcon"
+              />
+            </div>
+          </fetcher.Form>
+        ) : (
+          <p
+            className={`custom-input-display ${
+              displayClass ? displayClass : ""
+            }`}
+            onClick={() => setIsCustomInput(true)}
+          >
+            {text}
+          </p>
+        )}
+      </div>
     </Styled>
   );
-}
+};
 
 export default CustomInput;

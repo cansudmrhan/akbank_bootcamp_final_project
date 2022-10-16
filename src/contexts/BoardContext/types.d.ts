@@ -7,12 +7,13 @@ export interface User {
 export interface Label {
   id: number;
   title: string;
+  color: string;
 }
 
 export interface Comment {
   id: number;
   message: string;
-/*   author: User; */
+  /*   author: User; */
 }
 
 export interface ChecklistItem {
@@ -55,19 +56,20 @@ export interface List {
 export interface Board {
   id: number;
   title: string;
-  /*   owner: User; */
   ownerId: number;
-  members: User[];
-  lists: List[];
+  members?: User[];
+  lists?: List[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type StateType = {
-  selectedBoardId: number | null;
-  boards: Board[] | null;
+  boards: Board[];
 };
 
 export type ContextType = {
-  selectBoard: any;
   state: StateType;
+  selectedBoard: Board | undefined;
   setBoards: any;
+  deleteBoard: any;
 };

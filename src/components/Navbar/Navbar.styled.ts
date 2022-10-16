@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 export const Nav = styled.nav`
-  position: absolute;
+  position: fixed;
   top: 0em;
   left: 0;
   width: 100%;
@@ -13,15 +13,16 @@ export const Nav = styled.nav`
 `;
 
 export const StyledLink = styled(Link)`
-  background-color: #78d8e9;
+ /*  background-color: #78d8e9; */
   padding: 6px;
-  color: #00008b;
+  color: #fff;
   border: 2px solid #00008b;
   width: 100px;
-  border-radius: 40px;
+  /* border-radius: 4px; */
   display: flex;
   align-items: center;
   text-align: center;
+  font-size: 20px;
   cursor: pointer;
 `;
 
@@ -39,4 +40,9 @@ export const Icon = styled.div`
   display: grid;
   place-items: center;
   color: white;
+`;
+
+export const Title = styled.p`
+  font-size: 20px;
+  color: #fff;
 `;

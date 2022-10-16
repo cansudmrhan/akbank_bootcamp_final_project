@@ -1,16 +1,23 @@
 import React from "react";
 import { X } from "react-feather";
+import { Form, useParams } from "react-router-dom";
+import { UnstyledButton } from "shared/Button";
 /* import { ILabel } from "../../Interfaces/Kanban"; */
 /* interface ChipProps {
   item: ILabel;
   removeLabel?: (label: ILabel) => void;
 } */
 export default function Chip(props: any) {
-  const { item, removeLabel } = props;
+  const { item, action } = props;
+
   return (
     <label style={{ backgroundColor: item.color, color: "#fff" }}>
-      {item.text}
-      {removeLabel && <X onClick={() => removeLabel(item)} />}
+      {item.title}
+      <Form method="delete" action={action}>
+        <UnstyledButton type="submit">
+          <X />
+        </UnstyledButton>
+      </Form>
     </label>
   );
 }

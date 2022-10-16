@@ -1,6 +1,17 @@
 import styled from "styled-components";
 
 export const Styled = styled.div`
+  .footer {
+    position: fixed;
+    left: 0;
+    bottom: 0px;
+    right: 10px;
+    width: 100%;
+    background-color: #00008b;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+  }
   body {
     background: #fff;
     background-size: cover;

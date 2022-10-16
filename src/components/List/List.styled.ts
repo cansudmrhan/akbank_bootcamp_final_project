@@ -5,10 +5,13 @@ export const Styled = styled.div`
     /*   flex-basis: 290px; */
     /*     width: 290px;
     min-width: 290px; */
-    height: 100%;
+    /*   height: 100%; */
+    flex-basis: 290px;
+    min-width: 200px;
+    min-height: 200px;
     overflow-y: auto;
     display: flex;
-   /*  flex-direction: column; */
+    /*  flex-direction: column; */
     gap: 20px;
     color: #17394d;
   }
