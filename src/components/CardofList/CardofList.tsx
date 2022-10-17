@@ -29,6 +29,21 @@ const CardofList: FC<any> = ({ card, onDragEnter, onDragEnd }) => {
   } = card;
   const [showDropdown, setShowDropdown] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  var num = 0;
+  const isCheckListsCompleted = () => {
+    checklists.forEach((checklist: any) => {
+      if (
+        checklist.items?.filter((item: any) => item.completed).length ===
+        checklist.items.length
+      ) {
+        // console.log("arttı");
+        num++;
+      } else {
+        // console.log("değişmedi");
+      }
+    });
+    return num;
+  };
 
   return (
     <Styled>
@@ -40,11 +55,20 @@ const CardofList: FC<any> = ({ card, onDragEnter, onDragEnd }) => {
         />
       )}
       <div
-        className="card"
-        key={card.id}
+        key={id}
         draggable
-        onDragEnd={() => onDragEnd(listId, id)}
+        className="card"
+        onDragEnd={(event) => {
+          onDragEnd(listId, id);
+          event.currentTarget.style["backgroundColor"] = "";
+          event.currentTarget.style.opacity = "1";
+        }}
         onDragEnter={() => onDragEnter(listId, id)}
+        onDragStart={(event) => {
+          localStorage.setItem("cardId", id);
+          event.currentTarget.style["backgroundColor"] = "#2736E6";
+          event.currentTarget.style.opacity = "0.6";
+        }}
         onClick={() => setShowModal(true)}
       >
         <div className="card-top">
@@ -85,7 +109,9 @@ const CardofList: FC<any> = ({ card, onDragEnter, onDragEnd }) => {
             )}
           </div>
         </div>
-        <div className="card-title">{title}</div>
+        <div className="card-title">
+          {title} ({card.id})
+        </div>
         <div>
           <p title={description}>
             <AlignLeft />
@@ -108,8 +134,7 @@ const CardofList: FC<any> = ({ card, onDragEnter, onDragEnd }) => {
           {checklists && checklists?.length > 0 && (
             <p className="card-footer-item">
               <CheckSquare className="card-footer-icon" />
-              {checklists?.filter((item: any) => item.completed)?.length}/
-              {checklists?.length}
+              {isCheckListsCompleted()}/{checklists?.length}
             </p>
           )}
         </div>

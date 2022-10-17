@@ -1,12 +1,8 @@
 import React from "react";
 import { X } from "react-feather";
-import { Form, useParams } from "react-router-dom";
+import { Form } from "react-router-dom";
 import { UnstyledButton } from "shared/Button";
-/* import { ILabel } from "../../Interfaces/Kanban"; */
-/* interface ChipProps {
-  item: ILabel;
-  removeLabel?: (label: ILabel) => void;
-} */
+
 export default function Chip(props: any) {
   const { item, action } = props;
 

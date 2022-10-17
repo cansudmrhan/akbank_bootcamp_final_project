@@ -1,14 +1,16 @@
 import { redirect, useLoaderData } from "react-router-dom";
 
 import Board from "../components/Board/Board";
-import { Board as IBoard } from "contexts/BoardContext/types";
+import { Board as IBoard, User } from "contexts/BoardContext/types";
 import { boardService } from "services/http/endpoints/board";
+import { userService } from "services/http/endpoints/user";
 import { UpdateBoardRequestPayload } from "services/http/endpoints/board/types";
 
 export const loader = async ({ params }: any) => {
   const { data } = await boardService.getById(params.id);
+  const { data: users } = await userService.getAll();
 
-  return data;
+  return { data, users };
 };
 
 export async function action({ request, params }: any) {
@@ -37,9 +39,9 @@ export async function action({ request, params }: any) {
 }
 
 const BoardPage = () => {
-  const data = useLoaderData() as IBoard;
+  const { data, users } = useLoaderData() as { data: IBoard; users: User[] };
 
-  return <Board board={data} />;
+  return <Board board={data} users={users} />;
 };
 
 export default BoardPage;

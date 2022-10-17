@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-export const Styled = styled.div`
-  .dropdown {
+export const DropdownStyled = styled.div`
+
     position: absolute;
     right: 0;
     top: 100%;
@@ -16,5 +16,5 @@ export const Styled = styled.div`
     overflow-y: auto;
     z-index: 5;
     background-color: #33b7cf;
-  }
+ 
 `;

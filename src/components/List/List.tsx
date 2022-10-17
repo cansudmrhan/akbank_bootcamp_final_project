@@ -1,78 +1,51 @@
 import React, { FC, useEffect, useState } from "react";
 import { MoreHorizontal } from "react-feather";
-import { Form } from "react-router-dom";
+import { Form, useFetcher, useLocation } from "react-router-dom";
 import CardofList from "../CardofList/CardofList";
 import Dropdown from "../Dropdown/Dropdown";
 import CustomInput from "../CustomInput/CustomInput";
 import { Styled } from "./List.styled";
-import { HoverButton, UnstyledButton } from "shared/Button";
-import { useLocation } from "react-router-dom";
+import { HoverButton } from "shared/Button";
 
-import { List as IList, Card as ICard } from "contexts/BoardContext/types";
+import { Card as ICard } from "contexts/BoardContext/types";
 
-const List: FC<any> = ({ list, board }) => {
-  //////////////////////////////////////////////////////////////////
-  const [targetCard, setTargetCard] = useState({
-    listId: 0,
-    cardId: 0,
-  });
-  const [lists, setLists] = useState<IList[]>([]);
-  useEffect(() => {
-    setLists(board.lists);
-  }, []);
-
-  const onDragEnd = (listId: number, cardId: number) => {
-    const sourceListIndex = board.lists.findIndex(
-      (item: IList) => item.id === listId
-    );
-    if (sourceListIndex < 0) return;
-
-    const sourceCardIndex = board.lists[sourceListIndex]?.cards?.findIndex(
-      (item: ICard) => item.id === cardId
-    );
-    if (sourceCardIndex < 0) return;
-
-    const targetListIndex = board.lists.findIndex(
-      (item: IList) => item.id === targetCard.listId
-    );
-    if (targetListIndex < 0) return;
-
-    const targetCardIndex = board[targetListIndex]?.cards?.findIndex(
-      (item: ICard) => item.id === targetCard.cardId
-    );
-    if (targetCardIndex < 0) return;
-
-    const tempListsList = [...lists];
-    const sourceCard = tempListsList[sourceListIndex].cards[sourceCardIndex];
-    tempListsList[sourceListIndex].cards.splice(sourceCardIndex, 1);
-    tempListsList[targetListIndex].cards.splice(targetCardIndex, 0, sourceCard);
-    setLists(tempListsList);
-
-    setTargetCard({
-      listId: 0,
-      cardId: 0,
-    });
-  };
-
-  const onDragEnter = (listId: number, cardId: number) => {
-    if (targetCard.cardId === cardId) return;
-    setTargetCard({
-      listId: listId,
-      cardId: cardId,
-    });
-  };
-  ///////////////////////////////////////////////////////////////////////
-
+const List: FC<any> = ({ list, onDragEnter, onDragEnd }) => {
   const location = useLocation();
+  const fetcher = useFetcher();
   const [showDropdown, setShowDropdown] = useState(false);
+
   return (
     <Styled>
-      <div className="list">
+      <div
+        onDragOver={(event) => event.preventDefault()}
+        onDrop={(event) => {
+          if (!list.cards.length && localStorage.getItem("cardId")) {
+            console.log(list.id);
+
+            fetcher.submit(
+              {
+                "card-orders": JSON.stringify([
+                  {
+                    cardId: Number(localStorage.getItem("cardId")),
+                    listId: Number(list.id),
+                    order: 0,
+                  },
+                ]),
+              },
+              {
+                method: "patch",
+                action: `${location.pathname}/list`,
+              }
+            );
+            localStorage.removeItem("cardId");
+          }
+        }}
+        className="list"
+      >
         <div className="list-inner" key={list?.id}>
           <div className="list-header">
             <p className="list-header-title">
-              {list?.title}
-              <span>{list?.cards?.length || 0}</span>
+              {list?.title} ({list?.id})<span>{list?.cards?.length || 0}</span>
             </p>
             <div
               className="list-header-title-more"
@@ -107,14 +80,16 @@ const List: FC<any> = ({ list, board }) => {
             </div>
           </div>
           <div className="list-cards custom-scroll">
-            {list?.cards?.map((item: any) => (
-              <CardofList
-                key={item.id}
-                card={item}
-                onDragEnter={onDragEnter}
-                onDragEnd={onDragEnd}
-              />
-            ))}
+            {list?.cards
+              ?.sort((a: ICard, z: ICard) => a.order - z.order)
+              .map((item: any) => (
+                <CardofList
+                  key={item.id}
+                  card={item}
+                  onDragEnter={onDragEnter}
+                  onDragEnd={onDragEnd}
+                />
+              ))}
           </div>
           <CustomInput
             displayClass="list-add-card"

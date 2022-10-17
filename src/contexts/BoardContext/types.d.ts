@@ -58,7 +58,7 @@ export interface Board {
   title: string;
   ownerId: number;
   members?: User[];
-  lists?: List[];
+  lists: List[];
   createdAt: string;
   updatedAt: string;
 }

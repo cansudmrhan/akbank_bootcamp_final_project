@@ -20,7 +20,7 @@ const LoginForm: FC<LoginFormProps> = (props) => {
     setFormValues((prev) => ({ ...prev, [name]: v }))
   }
 
-  const navigate = useNavigate()
+/*   const navigate = useNavigate() */
 
   const handleSubmit = () => {
     props.onLogin?.(formValues)
@@ -48,9 +48,9 @@ const LoginForm: FC<LoginFormProps> = (props) => {
         />
         <div className="remember-forgot">
           <Checkbox label="Remember me" />
-          <a href="#" className="link">
+{/*           <a href="#" className="link">
             Forgot password
-          </a>
+          </a> */}
         </div>
 
         <Button onClick={handleSubmit}>Login now</Button>

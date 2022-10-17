@@ -10,9 +10,7 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <React.StrictMode>
-    <LoginProvider>
-      <App />
-    </LoginProvider>
-  </React.StrictMode>
+  <LoginProvider>
+    <App />
+  </LoginProvider>
 );

@@ -2,16 +2,14 @@ import styled from "styled-components";
 
 export const Styled = styled.div`
   .list {
-    /*   flex-basis: 290px; */
-    /*     width: 290px;
-    min-width: 290px; */
-    /*   height: 100%; */
-    flex-basis: 290px;
-    min-width: 200px;
-    min-height: 200px;
+    min-width: 290px;
+    width: 290px;
+    max-height: 560px;
+    height: 100%;
     overflow-y: auto;
+    flex-basis: 290px;
     display: flex;
-    /*  flex-direction: column; */
+    flex-direction: column;
     gap: 20px;
     color: #17394d;
   }

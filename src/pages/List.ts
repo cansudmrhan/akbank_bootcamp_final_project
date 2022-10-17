@@ -1,5 +1,8 @@
 import { redirect } from "react-router-dom";
 import { listService } from "services/http/endpoints/list";
+import { cardService } from "services/http/endpoints/card";
+import { UpdateCardRequestPayload } from "services/http/endpoints/card/types";
+import { Card as ICard } from "../contexts/BoardContext/types";
 
 export function loader({ params }: any) {
   const { id } = params;
@@ -13,14 +16,23 @@ export async function action({ request, params }: any) {
   if (request.method === "POST") {
     const payload = {
       boardId: +params.id,
-      title: formData.get("list-title"),
+      title: formData.get("title"),
     };
     await listService.create(payload);
-    return;
   }
 
   if (request.method === "PATCH") {
-    
+    if (formData.has("card-orders")) {
+      const cards = JSON.parse(formData.get("card-orders"));
+      await Promise.all(
+        cards.map((updateCardOrderPayload: any) => {
+          return cardService.update(updateCardOrderPayload.cardId, {
+            listId: updateCardOrderPayload.listId,
+            order: updateCardOrderPayload.order,
+          });
+        })
+      );
+    }
   }
 
   if (request.method === "DELETE") {

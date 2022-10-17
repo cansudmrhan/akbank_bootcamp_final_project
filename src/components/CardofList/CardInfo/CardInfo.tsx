@@ -15,7 +15,7 @@ import {
 import Chip from "../../Common/Chip";
 import Modal from "../../Modal/Modal";
 import CustomInput from "../../CustomInput/CustomInput";
-import { Styled, InvisibleInput } from "./CardInfo.styled";
+import { Styled } from "./CardInfo.styled";
 
 import { Card, Label } from "../../../contexts/BoardContext/types";
 import { UnstyledButton } from "shared/Button";
@@ -33,15 +33,15 @@ const CardInfo: FC<any> = (props) => {
   const fetcher = useFetcher();
 
   // çalışmazsa checklists i aradan kaldır
-  const calculatePercent = () => {
+  const calculatePercent = (index: number) => {
     if (!cardValues.checklists?.length) return 0;
-    const completed = cardValues.checklists?.filter(
-      (item: any) => item.items?.filter((item2: any) => item2.isChecked)
-      /* (item:any) => item.isChecked, */
+    console.log(cardValues.checklists[index], "ccc");
+    const completed = cardValues.checklists[index].items.filter(
+      (item) => item.isChecked
     )?.length;
-    return (completed / cardValues.checklists?.length) * 100;
+    return (completed / cardValues.checklists[index].items.length) * 100;
   };
-  const calculatedPercent = calculatePercent();
+  /* const calculatedPercent = calculatePercent(); */
 
   useEffect(() => {
     setCardValues(props.card);
@@ -178,7 +178,7 @@ const CardInfo: FC<any> = (props) => {
           </div>
 
           <div className="cardinfo-box">
-            {cardValues.checklists?.map((checklist: any) => (
+            {cardValues.checklists?.map((checklist: any, index) => (
               <div key={checklist.id}>
                 <div className="cardinfo-box-title">
                   <CheckSquare />
@@ -188,9 +188,9 @@ const CardInfo: FC<any> = (props) => {
                   <div
                     className="cardinfo-box-progress"
                     style={{
-                      width: `${calculatedPercent}%`,
+                      width: `${calculatePercent(index)}%`,
                       backgroundColor:
-                        calculatedPercent === 100 ? "limegreen" : "",
+                        calculatePercent(index) === 100 ? "limegreen" : "",
                     }}
                   />
                 </div>

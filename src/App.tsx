@@ -64,7 +64,7 @@ function App() {
             loader={boardLoader}
             action={boardAction}
           >
-            <Route path="list" loader={listLoader}>
+            <Route path="list" loader={listLoader} action={listAction}>
               <Route path="create" loader={listLoader} action={listAction} />
               <Route path=":listId" loader={listLoader} action={listAction}>
                 <Route path="card" loader={listLoader} action={cardAction}>
@@ -75,12 +75,11 @@ function App() {
                         loader={listLoader}
                         action={cardLabelAction}
                       />
-                          <Route
+                      <Route
                         path=":labelId"
                         loader={listLoader}
                         action={cardLabelAction}
                       />
-
                     </Route>
 
                     <Route path="comment" loader={listLoader}>

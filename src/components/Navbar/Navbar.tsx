@@ -1,13 +1,13 @@
 import React, { FC, useEffect, useState } from "react";
-import { Nav, StyledLink, Icon, NavInput,Title } from "./Navbar.styled";
+import { Nav, StyledLink, Icon, NavInput, Title } from "./Navbar.styled";
 import { Form, useFetcher, useNavigate } from "react-router-dom";
 import Dropdown from "../Dropdown/Dropdown";
+import { User } from "contexts/BoardContext/types";
 
-const Navbar: FC<any> = ({ selectedBoard }) => {
+const Navbar: FC<any> = ({ selectedBoard, users }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [editTitle, setEditTitle] = useState(false);
   const fetcher = useFetcher();
-
 
   useEffect(() => {
     if (fetcher.state === "submitting") {
@@ -23,9 +23,7 @@ const Navbar: FC<any> = ({ selectedBoard }) => {
 
   return (
     <Nav>
-      <StyledLink to="/">
-       BOARDS
-      </StyledLink>
+      <StyledLink to="/">BOARDS</StyledLink>
 
       <fetcher.Form method="patch">
         {editTitle ? (
@@ -46,7 +44,6 @@ const Navbar: FC<any> = ({ selectedBoard }) => {
         )}
       </fetcher.Form>
 
-  
       <Icon
         className="icon"
         onClick={(event) => {
@@ -60,19 +57,19 @@ const Navbar: FC<any> = ({ selectedBoard }) => {
             class="board-dropdown"
             onClose={() => setShowDropdown(false)}
           >
-         <select
-            /*   size="sm"  */
+            <select
+              /*   size="sm"  */
               className="filter-select"
               /* onChange={handleChangeCategory} */
-            /*   value={filteredCategory} */
+              /*   value={filteredCategory} */
             >
               <option value={""}>Add a Member</option>
-              {selectedBoard.lists.map((list:any) => (
-                <option key={list.id} value={list.id}>
-                  {list.title}
+              {users?.map((user: User) => (
+                <option key={user.id} value={user.id}>
+                  {user.username}
                 </option>
               ))}
-            </select> 
+            </select>
             {/*             <Form
               method="delete"
               onSubmit={(event) => {
