@@ -13,7 +13,7 @@ export interface Label {
 export interface Comment {
   id: number;
   message: string;
-  /*   author: User; */
+  author: User;
 }
 
 export interface ChecklistItem {

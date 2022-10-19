@@ -1,6 +1,6 @@
 import { createContext, useState, useContext, useCallback } from "react";
 import type { FC, PropsWithChildren } from "react";
-import { Label } from "contexts/BoardContext/types";
+import { Label } from "types";
 
 type IAppContext = {
   labels: Label[];

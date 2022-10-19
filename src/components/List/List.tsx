@@ -1,13 +1,13 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import { MoreHorizontal } from "react-feather";
 import { Form, useFetcher, useLocation } from "react-router-dom";
 import CardofList from "../CardofList/CardofList";
 import Dropdown from "../Dropdown/Dropdown";
 import CustomInput from "../CustomInput/CustomInput";
-import { Styled } from "./List.styled";
 import Button from "../Button/Button";
+import { Styled } from "./List.styled";
 
-import { Card as ICard } from "contexts/BoardContext/types";
+import { Card as ICard } from "types";
 
 const List: FC<any> = ({ list, onDragEnter, onDragEnd }) => {
   const location = useLocation();
@@ -20,8 +20,6 @@ const List: FC<any> = ({ list, onDragEnter, onDragEnd }) => {
         onDragOver={(event) => event.preventDefault()}
         onDrop={(event) => {
           if (!list.cards.length && localStorage.getItem("cardId")) {
-            console.log(list.id);
-
             fetcher.submit(
               {
                 "card-orders": JSON.stringify([
@@ -45,7 +43,8 @@ const List: FC<any> = ({ list, onDragEnter, onDragEnd }) => {
         <div className="list-inner" key={list?.id}>
           <div className="list-header">
             <p className="list-header-title">
-              {list?.title} ({list?.id})<span>{list?.cards?.length || 0}</span>
+              {list?.title}
+              <span>{list?.cards?.length || 0}</span>
             </p>
             <div
               className="list-header-title-more"
@@ -79,7 +78,7 @@ const List: FC<any> = ({ list, onDragEnter, onDragEnd }) => {
           <div className="list-cards custom-scroll">
             {list?.cards
               ?.sort((a: ICard, z: ICard) => a.order - z.order)
-              .map((item: any) => (
+              .map((item: ICard) => (
                 <CardofList
                   key={item.id}
                   card={item}

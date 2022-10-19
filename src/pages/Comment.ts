@@ -6,9 +6,11 @@ import {
 
 export async function action({ request, params }: any) {
   const formData = await request.formData();
+
+  //comment post
   if (request.method === "POST") {
     const payload: CreateCommentRequestPayload = {
-      cardId:+params.cardId,
+      cardId: +params.cardId,
       message: formData.get("card-comment"),
     };
     await commentService.create(payload);

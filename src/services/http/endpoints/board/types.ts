@@ -1,4 +1,4 @@
-import { Board } from "../../../../contexts/BoardContext/types";
+import { Board } from "../../../../types";
 
 export type CreateBoardRequestPayload = {
   title: string;

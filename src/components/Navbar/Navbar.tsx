@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import { Nav, StyledLink, Icon, NavInput, Title } from "./Navbar.styled";
-import { Form, useFetcher, useNavigate } from "react-router-dom";
+import { Form, useFetcher} from "react-router-dom";
 import Dropdown from "../Dropdown/Dropdown";
 import Member from "../Member/Member";
 import Button from "../Button/Button";
@@ -60,7 +60,7 @@ const Navbar: FC<any> = ({ selectedBoard, users }) => {
             class="board-dropdown"
             onClose={() => setShowDropdown(false)}
           >
-            {showModal && <Member onClose={() => setShowModal(false)}  users={users} selectedBoard={selectedBoard} />}
+            {showModal && <Member onClose={() => setShowModal(false)}  users={users}  selectedBoard={selectedBoard} />}
             <Button className="member" onClick={() => setShowModal(true)}>
               Add Member
             </Button>

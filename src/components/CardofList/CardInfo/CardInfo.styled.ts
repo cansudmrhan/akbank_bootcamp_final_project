@@ -101,10 +101,19 @@ export const Styled = styled.div`
     margin: 1rem 0 0 0;
   }
 
-  /*   .cardinfo-box-comment {
-     text-align: left; 
- 
-  } */
+  .cardinfo-box-comment {
+    text-align: left;
+    justify-content: space-between;
+  }
+  .author {
+    display: flex;
+    gap: 15px;
+    margin-right: 20px;
+    margin-bottom: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+  }
 
   .cardinfo-box-task-checkbox {
     display: flex;

@@ -15,11 +15,11 @@ import {
 import Chip from "../../Common/Chip";
 import Modal from "../../Modal/Modal";
 import CustomInput from "../../CustomInput/CustomInput";
-import { Styled } from "./CardInfo.styled";
 
-import { Card, Label } from "../../../contexts/BoardContext/types";
-import { UnstyledButton } from "shared/Button";
+import { Card, Comment, Checklist, ChecklistItem } from "../../../types";
 import { useAppContext } from "contexts/AppContext/AppContext";
+import { UnstyledButton } from "components/Common/Button";
+import { Styled } from "./CardInfo.styled";
 
 const CardInfo: FC<any> = (props) => {
   const { onClose, card, listId } = props;
@@ -32,16 +32,13 @@ const CardInfo: FC<any> = (props) => {
   });
   const fetcher = useFetcher();
 
-  // çalışmazsa checklists i aradan kaldır
   const calculatePercent = (index: number) => {
     if (!cardValues.checklists?.length) return 0;
-    console.log(cardValues.checklists[index], "ccc");
     const completed = cardValues.checklists[index].items.filter(
       (item) => item.isChecked
     )?.length;
     return (completed / cardValues.checklists[index].items.length) * 100;
   };
-  /* const calculatedPercent = calculatePercent(); */
 
   useEffect(() => {
     setCardValues(props.card);
@@ -110,14 +107,16 @@ const CardInfo: FC<any> = (props) => {
               <MessageSquare />
               <p>Comments</p>
             </div>
-            <div className="cardinfo-box-comments">
-              {cardValues.comments?.map((item: any) => (
-                <div key={item.id} className="cardinfo-box-comment">
-                  <p>{item.message}</p>
-                  <p>Author: {item.author.username}</p>
-                </div>
+            <table className="cardinfo-box-comments">
+              {cardValues.comments?.map((item: Comment) => (
+                <tbody key={item.id} className="cardinfo-box-comment">
+                  <tr>
+                    <td className="author">{item.author.username}:</td>
+                    <td>{item.message}</td>
+                  </tr>
+                </tbody>
               ))}
-            </div>
+            </table>
             <CustomInput
               text={"Add a comment"}
               placeholder="Your comment"
@@ -150,7 +149,7 @@ const CardInfo: FC<any> = (props) => {
               <p>Labels</p>
             </div>
             <div className="cardinfo-box-labels">
-              {cardValues.labels?.map((item: any, index: any) => (
+              {cardValues.labels?.map((item: any, index: number) => (
                 <Chip
                   key={index}
                   item={item}
@@ -178,7 +177,7 @@ const CardInfo: FC<any> = (props) => {
           </div>
 
           <div className="cardinfo-box">
-            {cardValues.checklists?.map((checklist: any, index) => (
+            {cardValues.checklists?.map((checklist: Checklist, index) => (
               <div key={checklist.id}>
                 <div className="cardinfo-box-title">
                   <CheckSquare />
@@ -196,7 +195,7 @@ const CardInfo: FC<any> = (props) => {
                 </div>
 
                 <div className="cardinfo-box-task-list">
-                  {checklist?.items.map((item: any) => (
+                  {checklist?.items.map((item: ChecklistItem) => (
                     <div key={item.id} className="cardinfo-box-task-checkbox">
                       <div className="cardinfo-box-task-checkbox__first">
                         <itemFetcher.Form method="patch">

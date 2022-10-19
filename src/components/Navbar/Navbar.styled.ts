@@ -13,12 +13,10 @@ export const Nav = styled.nav`
 `;
 
 export const StyledLink = styled(Link)`
- /*  background-color: #78d8e9; */
   padding: 6px;
   color: #fff;
   border: 2px solid #00008b;
   width: 100px;
-  /* border-radius: 4px; */
   display: flex;
   align-items: center;
   text-align: center;

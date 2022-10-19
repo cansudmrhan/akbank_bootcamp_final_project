@@ -2,7 +2,7 @@ import React, { useEffect, FC } from "react";
 import { redirect, useLoaderData } from "react-router-dom";
 import { boardService } from "services/http/endpoints/board";
 import DashboardList from "../components/Dashboard/DashboardList";
-import { Board, Label as ILabel } from "contexts/BoardContext/types";
+import { Board, Label as ILabel } from "types";
 import { useAppContext } from "contexts/AppContext/AppContext";
 type Props = {};
 

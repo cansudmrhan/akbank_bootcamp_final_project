@@ -15,6 +15,10 @@ import BoardPage, {
   action as boardAction,
 } from "./pages/BoardPage";
 import { loader as listLoader, action as listAction } from "./pages/List";
+import {
+  loader as boardMemberLoader,
+  action as boardMemberAction,
+} from "./pages/BoardMember";
 import { action as cardAction } from "./pages/Card";
 import { action as commentAction } from "./pages/Comment";
 import { action as checklistAction } from "./pages/Checklist";
@@ -64,6 +68,13 @@ function App() {
             loader={boardLoader}
             action={boardAction}
           >
+            <Route
+              path="board-member"
+              loader={boardMemberLoader}
+              action={boardMemberAction}
+            >
+              <Route path=":boardMemberId" loader={boardMemberLoader} action={boardMemberAction} />
+            </Route>
             <Route path="list" loader={listLoader} action={listAction}>
               <Route path="create" loader={listLoader} action={listAction} />
               <Route path=":listId" loader={listLoader} action={listAction}>

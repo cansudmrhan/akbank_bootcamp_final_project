@@ -12,8 +12,10 @@ import { formatDate } from "../Common/Util";
 import Chip from "../Common/Chip";
 import Dropdown from "../Dropdown/Dropdown";
 import CardInfo from "./CardInfo/CardInfo";
-import { Styled } from "./CardofList.styled";
 import Button from "../Button/Button";
+import { Styled } from "./CardofList.styled";
+
+import { Checklist, ChecklistItem } from "../../types";
 
 const CardofList: FC<any> = ({ card, onDragEnter, onDragEnd }) => {
   const location = useLocation();
@@ -31,15 +33,12 @@ const CardofList: FC<any> = ({ card, onDragEnter, onDragEnd }) => {
   const [showModal, setShowModal] = useState(false);
   var num = 0;
   const isCheckListsCompleted = () => {
-    checklists.forEach((checklist: any) => {
+    checklists.forEach((checklist: Checklist) => {
       if (
-        checklist.items?.filter((item: any) => item.completed).length ===
-        checklist.items.length
+        checklist.items?.filter((item: ChecklistItem) => item.isChecked)
+          .length === checklist.items.length
       ) {
-        // console.log("arttı");
         num++;
-      } else {
-        // console.log("değişmedi");
       }
     });
     return num;
@@ -73,8 +72,12 @@ const CardofList: FC<any> = ({ card, onDragEnter, onDragEnd }) => {
       >
         <div className="card-top">
           <div className="card-top-labels">
-            {labels?.map((item: any, index: any) => (
-              <Chip key={index} item={item} />
+            {labels?.map((item: any, index: number) => (
+              <Chip
+                key={index}
+                item={item}
+                action={`${location.pathname}/list/${listId}/card/${card?.id}/card-label/${item?.CardLabel?.id}`}
+              />
             ))}
           </div>
           <div
@@ -110,7 +113,7 @@ const CardofList: FC<any> = ({ card, onDragEnter, onDragEnd }) => {
           </div>
         </div>
         <div className="card-title">
-          {title} ({card.id})
+          {title} 
         </div>
         <div>
           <p title={description}>

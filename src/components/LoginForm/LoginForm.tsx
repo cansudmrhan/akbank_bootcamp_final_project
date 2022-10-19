@@ -1,5 +1,4 @@
 import React, { FC, useState } from 'react'
-import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
 import Button from '../Button'
 import Card from '../Card'
@@ -20,7 +19,6 @@ const LoginForm: FC<LoginFormProps> = (props) => {
     setFormValues((prev) => ({ ...prev, [name]: v }))
   }
 
-/*   const navigate = useNavigate() */
 
   const handleSubmit = () => {
     props.onLogin?.(formValues)
@@ -48,9 +46,6 @@ const LoginForm: FC<LoginFormProps> = (props) => {
         />
         <div className="remember-forgot">
           <Checkbox label="Remember me" />
-{/*           <a href="#" className="link">
-            Forgot password
-          </a> */}
         </div>
 
         <Button onClick={handleSubmit}>Login now</Button>

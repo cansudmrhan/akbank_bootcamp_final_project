@@ -22,4 +22,3 @@ export const Styled = styled.div`
 
 `
 
-//5d7cc7

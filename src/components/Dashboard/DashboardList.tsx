@@ -8,7 +8,7 @@ import {
   Card,
 } from "./DashboardList.styled";
 
-import { Board } from "../../contexts/BoardContext/types";
+import { Board } from "../../types";
 
 type Props = {
   list: Board[];

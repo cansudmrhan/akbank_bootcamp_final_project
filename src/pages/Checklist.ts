@@ -2,7 +2,7 @@ import { checklistService } from "services/http/endpoints/checklist";
 
 export async function action({ request, params }: any) {
   const formData = await request.formData();
-
+//checklist post
   if (request.method === "POST") {
     const payload = {
       cardId: +params.cardId,

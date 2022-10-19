@@ -25,6 +25,7 @@ export const Styled = styled.div`
     gap: 5px;
     font-size: 14px;
     line-height: 21px;
+
   }
 
   .card-top-labels label {

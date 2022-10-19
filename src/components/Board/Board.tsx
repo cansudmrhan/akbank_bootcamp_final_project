@@ -8,7 +8,7 @@ import {
   User,
   List as IList,
   Card as ICard,
-} from "contexts/BoardContext/types";
+} from "types";
 import { useFetcher, useLocation, useNavigate } from "react-router-dom";
 import { useLoginContext } from "contexts/LoginContext/LoginContext";
 
@@ -18,10 +18,10 @@ type Props = {
 };
 
 const Board: FC<Props> = ({ board, users }) => {
+  
   const location = useLocation();
   const { logout } = useLoginContext();
   const fetcher = useFetcher();
-
   const navigate = useNavigate();
 
   const handleLogout = () => {

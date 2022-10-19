@@ -28,7 +28,6 @@ const RegisterForm: FC<RegisterFormProps> = (props) => {
     props.onRegister?.(formValues)
   }
 
-  const navigate = useNavigate()
   return (
     <Styled>
       <Card title="Register">
@@ -50,7 +49,6 @@ const RegisterForm: FC<RegisterFormProps> = (props) => {
           placeholder="Create a password"
           style={{ marginBottom: '15px' }}
         />
-
         <Input
           name="passwordConfirm"
           onChange={handleChange}

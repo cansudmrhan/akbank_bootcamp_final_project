@@ -1,75 +1,75 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import type { FC } from "react";
 import {
-  Form,
   useFetcher,
   useParams,
-  useLocation,
-  useSubmit,
 } from "react-router-dom";
-import { User } from "contexts/BoardContext/types";
+import { User } from "types";
 import Button from "../Button/Button";
 import Modal from "../Modal/Modal";
 import {
   MemberList,
-  MemberBox,
-  Memberli,
-  Memberul,
   MemberTd,
 } from "./Member.styled";
-import { useAppContext } from "contexts/AppContext/AppContext";
 
 const Member: FC<any> = (props) => {
   const { onClose, users, selectedBoard } = props;
   const { id: boardId } = useParams();
-  const { labels } = useAppContext();
-
-  const location = useLocation();
   const fetcher = useFetcher();
 
-  const itemFetcher = useFetcher();
-  let submit = useSubmit();
-
-  const updateBoardMember = (username: any) => {
+  const updateBoardMember = (username: string) => {
     const value = username;
-    console.log({ value });
     const formData = new FormData();
     formData.set("board-member", value);
-    formData.set("title", selectedBoard.title);
     fetcher.submit(formData, {
-      method: "patch",
-      action: `/board/${boardId}/`,
+      method: "post",
+      action: `/board/${boardId}/board-member`,
     });
   };
+
+  const deleteBoardMember = (userId: any) => {
+    const user = selectedBoard.members.find((user: User) => user.id === userId);
+    if (user) {
+      const formData = {};
+      fetcher.submit(formData, {
+        method: "delete",
+        action: `/board/${boardId}/board-member/${user.BoardMember.id}`,
+      });
+    }
+  };
+  const userIds = selectedBoard.members.map((user: User) => user.id);
+
   return (
     <Modal onClose={onClose}>
       <MemberList>
         <tbody>
-          {users.map((user: User, index: number) => (
-            <tr key={index}>
-              {/*                 <td>
-                  <input
-                    type="checkbox"
-                    value={
-                      user.id
-                    } 
-                  />
-                </td> */}
-              <MemberTd>{user.username}</MemberTd>
-              <td>
-                <fetcher.Form method="patch" name="board-member">
-                  <Button
-                    type="submit"
-                    onClick={updateBoardMember(user.username)}
-                  >
-                    Add to Board
-                  </Button>
-                </fetcher.Form>
-              </td>
-            </tr>
-          ))}
+          {users
+            .filter((user: User) => user.id !== selectedBoard.ownerId)
+            .map((user: User, index: number) => (
+              <tr key={index}>
+                <MemberTd>{user.username}</MemberTd>
+                <td>
+                  <fetcher.Form method="post">
+                    {userIds.includes(user.id) ? (
+                      <Button
+                        type="submit"
+                        onClick={() => deleteBoardMember(user.id)}
+                      >
+                        Delete from Board
+                      </Button>
+                    ) : (
+                      <Button
+                        type="submit"
+                        onClick={() => updateBoardMember(user.username)}
+                      >
+                        Add to Board
+                      </Button>
+                    )}
+                  </fetcher.Form>
+                </td>
+              </tr>
+            ))}
         </tbody>
-        {/*  <Button>Add Member</Button> */}
       </MemberList>
     </Modal>
   );

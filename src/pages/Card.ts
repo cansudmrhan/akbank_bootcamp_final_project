@@ -4,7 +4,7 @@ import { UpdateCardRequestPayload } from "services/http/endpoints/card/types";
 export async function action({ request, params }: any) {
   const formData = await request.formData();
 
-  // create
+  // card create
   if (request.method === "POST") {
     const payload = {
       title: formData.get("card-title"),
@@ -13,7 +13,7 @@ export async function action({ request, params }: any) {
     await cardService.create(payload);
   }
 
-  // update
+  // card update
   if (request.method === "PATCH") {
     const listId = +params.listId;
     const cardId = +params.cardId;
@@ -30,11 +30,10 @@ export async function action({ request, params }: any) {
     if (formData.has("card-description")) {
       payload.description = formData.get("card-description");
     }
-
     await cardService.update(cardId, payload);
   }
 
-  // delete
+  // card delete
   if (request.method === "DELETE") {
     await cardService.destroy(+params.cardId);
   }
