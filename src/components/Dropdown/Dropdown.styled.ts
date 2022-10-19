@@ -15,6 +15,6 @@ export const DropdownStyled = styled.div`
     max-height: 390px;
     overflow-y: auto;
     z-index: 5;
-    background-color: #33b7cf;
+    background-color: #4071f4;
  
 `;

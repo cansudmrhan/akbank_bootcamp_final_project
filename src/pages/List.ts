@@ -16,7 +16,7 @@ export async function action({ request, params }: any) {
   if (request.method === "POST") {
     const payload = {
       boardId: +params.id,
-      title: formData.get("title"),
+      title: formData.get("list-title"),
     };
     await listService.create(payload);
   }

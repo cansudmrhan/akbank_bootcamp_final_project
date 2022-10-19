@@ -5,7 +5,7 @@ import CardofList from "../CardofList/CardofList";
 import Dropdown from "../Dropdown/Dropdown";
 import CustomInput from "../CustomInput/CustomInput";
 import { Styled } from "./List.styled";
-import { HoverButton } from "shared/Button";
+import Button from "../Button/Button";
 
 import { Card as ICard } from "contexts/BoardContext/types";
 
@@ -56,10 +56,7 @@ const List: FC<any> = ({ list, onDragEnter, onDragEnd }) => {
             >
               <MoreHorizontal />
               {showDropdown && (
-                <Dropdown
-                  class="list-dropdown"
-                  onClose={() => setShowDropdown(false)}
-                >
+                <Dropdown onClose={() => setShowDropdown(false)}>
                   <Form
                     action={`${location.pathname}/list/${list?.id}`}
                     method="delete"
@@ -73,7 +70,7 @@ const List: FC<any> = ({ list, onDragEnter, onDragEnd }) => {
                       }
                     }}
                   >
-                    <HoverButton type="submit">Delete List</HoverButton>
+                    <Button type="submit">Delete List</Button>
                   </Form>
                 </Dropdown>
               )}

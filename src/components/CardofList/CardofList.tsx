@@ -13,7 +13,7 @@ import Chip from "../Common/Chip";
 import Dropdown from "../Dropdown/Dropdown";
 import CardInfo from "./CardInfo/CardInfo";
 import { Styled } from "./CardofList.styled";
-import { HoverButton, UnstyledButton } from "shared/Button";
+import Button from "../Button/Button";
 
 const CardofList: FC<any> = ({ card, onDragEnter, onDragEnd }) => {
   const location = useLocation();
@@ -103,7 +103,7 @@ const CardofList: FC<any> = ({ card, onDragEnter, onDragEnd }) => {
                     }
                   }}
                 >
-                  <HoverButton type="submit">Delete Card</HoverButton>
+                  <Button type="submit">Delete Card</Button>
                 </Form>
               </Dropdown>
             )}

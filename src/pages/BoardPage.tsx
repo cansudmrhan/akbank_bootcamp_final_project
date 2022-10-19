@@ -28,6 +28,7 @@ export async function action({ request, params }: any) {
 
     if (formData.has("member")) {
       payload.members = formData.get("board-member");
+      console.log("board patch");
     }
     await boardService.update(+params.id, payload);
   }

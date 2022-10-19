@@ -42,19 +42,6 @@ export const Styled = styled.div`
     position: relative;
   }
 
-  .list-dropdown {
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-      rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
-      rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-    padding: 10px;
-    width: 150px !important;
-    cursor: default;
-  }
-  .list-dropdown p {
-    border-bottom: 1px solid #f8f8f8;
-    cursor: pointer;
-  }
-
   .list-cards {
     background-color: #f8f8f8;
     padding: 10px;

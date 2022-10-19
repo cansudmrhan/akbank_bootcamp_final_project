@@ -2,10 +2,13 @@ import React, { FC, useEffect, useState } from "react";
 import { Nav, StyledLink, Icon, NavInput, Title } from "./Navbar.styled";
 import { Form, useFetcher, useNavigate } from "react-router-dom";
 import Dropdown from "../Dropdown/Dropdown";
-import { User } from "contexts/BoardContext/types";
+import Member from "../Member/Member";
+import Button from "../Button/Button";
+
 
 const Navbar: FC<any> = ({ selectedBoard, users }) => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [editTitle, setEditTitle] = useState(false);
   const fetcher = useFetcher();
 
@@ -57,20 +60,12 @@ const Navbar: FC<any> = ({ selectedBoard, users }) => {
             class="board-dropdown"
             onClose={() => setShowDropdown(false)}
           >
-            <select
-              /*   size="sm"  */
-              className="filter-select"
-              /* onChange={handleChangeCategory} */
-              /*   value={filteredCategory} */
-            >
-              <option value={""}>Add a Member</option>
-              {users?.map((user: User) => (
-                <option key={user.id} value={user.id}>
-                  {user.username}
-                </option>
-              ))}
-            </select>
-            {/*             <Form
+            {showModal && <Member onClose={() => setShowModal(false)}  users={users} selectedBoard={selectedBoard} />}
+            <Button className="member" onClick={() => setShowModal(true)}>
+              Add Member
+            </Button>
+
+            <Form
               method="delete"
               onSubmit={(event) => {
                 if (
@@ -82,10 +77,10 @@ const Navbar: FC<any> = ({ selectedBoard, users }) => {
                 }
               }}
             >
-              <HoverButton type="submit">
+              <Button type="submit">
                 Delete {selectedBoard?.title || "Untitled Board"}
-              </HoverButton>
-            </Form> */}
+              </Button>
+            </Form>
           </Dropdown>
         )}
       </Icon>
