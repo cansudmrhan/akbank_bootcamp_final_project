@@ -8,6 +8,8 @@ This Kanban App developed using React with Typescript.
 - Typescript
 - React Router
 - Axios
+- styled-components
+- Bootstrap
 - Material Symbols
 - Feather Icons
 
@@ -34,6 +36,7 @@ This Kanban App developed using React with Typescript.
 
 ## Card
 
+- Drag and Drop the Cards
 - Adding Cards to Lists
 - Show Cards by Lists
 - Card Delete
