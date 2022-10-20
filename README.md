@@ -15,11 +15,9 @@ This Kanban App developed using React with Typescript.
 
 ## User
 
--Register
-
--Login
-
--Logout
+- Register
+- Login
+- Logout
 
 ## Board
 
