@@ -108,9 +108,8 @@ export const Styled = styled.div`
   .author {
     display: flex;
     gap: 15px;
-    margin-right: 20px;
-    margin-bottom: 15px;
-    font-size: 20px;
+    margin-right: 10px;
+    font-size: 18px;
     font-weight: bold;
     text-align: center;
   }

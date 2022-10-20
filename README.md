@@ -13,9 +13,15 @@ This Kanban App developed using React with Typescript.
 
 # Working Features in Project
 
+## User
+
+-Register
+-Login
+-Logout
 ## Board
+
 - Adding board
-- Board Title Update 
+- Board Title Update
 - Board Delete
 - Adding Members to Board
 - Delete Member from Board
@@ -34,8 +40,9 @@ This Kanban App developed using React with Typescript.
 - Adding Label by importance
 - Adding comments with author's name
 - Adding Checklist to Card
-- Adding ChecklistItem to Checklist
+- Add/Delete ChecklistItem to Checklist
 - Show Checklist completion rate
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -17,7 +17,7 @@ export const Title = styled.h1`
 `;
 
 export const Card = styled.div`
-  background-color: #e7e8de;
+  background-color: #4071f4;
   border-radius: 20px;
   box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.4);
   padding: 100px 30px;
@@ -27,7 +27,7 @@ export const Card = styled.div`
   width: 200px;
   height: 300px;
   text-align: center;
-  font-size: 20px;
+  font-size: 24px;
   justify-content: center;
   cursor: pointer;
 `;
