@@ -43,6 +43,10 @@ This Kanban App developed using React with Typescript.
 - Add/Delete ChecklistItem to Checklist
 - Show Checklist completion rate
 
+# Images of Project
+
+![My Remote Image](https://github.com/cansudmrhan/akbank_bootcamp_final_project/blob/main/project-images/login.png)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
