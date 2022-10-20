@@ -47,6 +47,18 @@ This Kanban App developed using React with Typescript.
 
 ![My Remote Image](https://github.com/cansudmrhan/akbank_bootcamp_final_project/blob/main/project-images/login.png)
 
+![My Remote Image](https://github.com/cansudmrhan/akbank_bootcamp_final_project/blob/main/project-images/register.png)
+
+![My Remote Image](https://github.com/cansudmrhan/akbank_bootcamp_final_project/blob/main/project-images/dashboard.png)
+
+![My Remote Image](https://github.com/cansudmrhan/akbank_bootcamp_final_project/blob/main/project-images/board.png)
+
+![My Remote Image](https://github.com/cansudmrhan/akbank_bootcamp_final_project/blob/main/project-images/carddetail.png)
+
+![My Remote Image](https://github.com/cansudmrhan/akbank_bootcamp_final_project/blob/main/project-images/checklist.png)
+
+![My Remote Image](https://github.com/cansudmrhan/akbank_bootcamp_final_project/blob/main/project-images/member.png)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
