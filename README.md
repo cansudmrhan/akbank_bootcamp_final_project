@@ -44,6 +44,12 @@ This Kanban App developed using React with Typescript.
 - Add/Delete ChecklistItem to Checklist
 - Show Checklist completion rate
 
+# TODO
+ In the app, when the token expires there might be redirection issues. Please follow the steps:
+ 
+  - Remove localStorage's token and user parameters.
+  - Login again
+
 # Images of Project
 
 ![My Remote Image](https://github.com/cansudmrhan/akbank_bootcamp_final_project/blob/main/project-images/login.png)
